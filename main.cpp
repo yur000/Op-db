@@ -14,14 +14,14 @@ int main(int argc, char *argv[]) {
     mw->show();
 
     QPushButton *button = new QPushButton(
-         QString::fromLocal8Bit("&Выход") ); // Кнопка.
-     button->setFont(QFont("Times", 16, QFont::Bold));
-     QObject::connect(
-       button,            // Источник сигнала.
-           SIGNAL(clicked()), // Сигнал о нажатии кнопки.
+    QString::fromLocal8Bit("&Выход") ); // Кнопка.
+    button->setFont(QFont("Times", 16, QFont::Bold));
+    QObject::connect(
+        button,            // Источник сигнала.
+        SIGNAL(clicked()), // Сигнал о нажатии кнопки.
         &app,              // Приёмник сигнала.
-         SLOT( quit() ) );  // Функция-слот (обработчик события).
-     button->show();
+        SLOT( quit() ) );  // Функция-слот (обработчик события).
+    button->show();
 
     return app.exec();
 }
