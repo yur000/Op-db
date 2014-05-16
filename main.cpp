@@ -1,27 +1,34 @@
 #include <QApplication>
-#include <QMainWindow>
-
+#include <QLabel>
 #include <QPushButton>
+#include <iostream>
+#include "header.h"
 
-
-int main(int argc, char *argv[]) {
+int main (int argc, char** argv)
+{
     QApplication app(argc, argv);
 
+    QLabel      lbl("Zeeeeerrrrooo");
+    QPushButton cmd("ADD");
+    QPushButton cmd2("ADD33");
+    Counter     counter;
+    cmd.show();
+    lbl.show();
+    cmd2.show();
 
-    QMainWindow *mw = new QMainWindow(0, Qt::Window);
-    mw->setWindowTitle("Hello Qt4");
-    mw->resize(400, 200);
-    mw->show();
+    QObject::connect(&cmd, SIGNAL(clicked()),
+                     &counter, SLOT(slotInc())
+                    );
+    QObject::connect(&cmd2, SIGNAL(clicked()),
+                     &counter, SLOT(slotInc())
+                    );
 
-    QPushButton *button = new QPushButton(
-    QString::fromLocal8Bit("&Выход") ); // Кнопка.
-    button->setFont(QFont("Times", 16, QFont::Bold));
-    QObject::connect(
-        button,            // Источник сигнала.
-        SIGNAL(clicked()), // Сигнал о нажатии кнопки.
-        &app,              // Приёмник сигнала.
-        SLOT( quit() ) );  // Функция-слот (обработчик события).
-    button->show();
+    QObject::connect(&counter, SIGNAL(counterChanged(int)),
+                     &lbl, SLOT(setNum(int))
+                    );
 
+    QObject::connect(&counter, SIGNAL(goodbye()),
+                     &app, SLOT(quit())
+                    );
     return app.exec();
 }

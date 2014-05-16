@@ -12,6 +12,8 @@ TARGET = Kurs
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    header.cpp
 
-HEADERS  +=
+HEADERS  += \
+    header.h
