@@ -1,34 +1,36 @@
+#include <QtGui>
 #include <QApplication>
+#include <QMainWindow>
 #include <QLabel>
 #include <QPushButton>
-#include <iostream>
+#include <QLayout>
+#include <QTableWidget>
+#include <QStringList>
+#include <QMenu>
 #include "header.h"
 
 int main (int argc, char** argv)
 {
-    QApplication app(argc, argv);
+    int n = 3;
+    QApplication        app(argc, argv);
+    QWidget             mainWindow;
+    QLayout             *layout = new QBoxLayout(QBoxLayout::TopToBottom);
+    QTableWidget        table(n, n);
+    QTableWidgetItem    *ptwi;
+    QStringList         strList;
 
-    QLabel      lbl("Zeeeeerrrrooo");
-    QPushButton cmd("ADD");
-    QPushButton cmd2("ADD33");
-    Counter     counter;
-    cmd.show();
-    lbl.show();
-    cmd2.show();
+    strList << "Number" << "Balance" << "Internet";
+    table.setHorizontalHeaderLabels(strList);
+    for (int i = 0; i < n; ++i) {
+    for (int j = 0; j < n; ++j) {
+    ptwi = new QTableWidgetItem(QString("%1,%2").arg(i).arg(j));
+    table.setItem(i, j, ptwi);
+    }
+    }
 
-    QObject::connect(&cmd, SIGNAL(clicked()),
-                     &counter, SLOT(slotInc())
-                    );
-    QObject::connect(&cmd2, SIGNAL(clicked()),
-                     &counter, SLOT(slotInc())
-                    );
+    layout->addWidget(&table);
+    mainWindow.setLayout(layout);
+    mainWindow.show();
 
-    QObject::connect(&counter, SIGNAL(counterChanged(int)),
-                     &lbl, SLOT(setNum(int))
-                    );
-
-    QObject::connect(&counter, SIGNAL(goodbye()),
-                     &app, SLOT(quit())
-                    );
     return app.exec();
 }

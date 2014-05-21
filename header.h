@@ -1,3 +1,6 @@
+#ifndef HEADER_H
+#define HEADER_H
+
 #include <QObject>
 
 class Counter : public QObject {
@@ -16,3 +19,4 @@ signals:
     void counterChanged(int);
 };
 
+#endif // HEADER_H
