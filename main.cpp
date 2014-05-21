@@ -20,12 +20,13 @@ int main (int argc, char** argv)
     QStringList         strList;
 
     strList << "Number" << "Balance" << "Internet";
+    //TEST
     table.setHorizontalHeaderLabels(strList);
     for (int i = 0; i < n; ++i) {
-    for (int j = 0; j < n; ++j) {
-    ptwi = new QTableWidgetItem(QString("%1,%2").arg(i).arg(j));
-    table.setItem(i, j, ptwi);
-    }
+        for (int j = 0; j < n; ++j) {
+            ptwi = new QTableWidgetItem(QString("%1,%2").arg(i).arg(j));
+            table.setItem(i, j, ptwi);
+        }
     }
 
     layout->addWidget(&table);
