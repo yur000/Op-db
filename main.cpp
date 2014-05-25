@@ -38,6 +38,7 @@ int main (int argc, char** argv)
     }
 
     layout->addWidget(&table);
+    mainWindow.resize(550,300);
     mainWindow.setLayout(layout);
     mainWindow.show();
 
