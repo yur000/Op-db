@@ -13,7 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    header.cpp
+    header.cpp \
+    stack.cpp \
+    container.cpp
 
 HEADERS  += \
-    header.h
+    header.h \
+    stack.h \
+    container.h
