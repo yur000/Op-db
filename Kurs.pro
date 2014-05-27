@@ -14,10 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     header.cpp \
-    stack.cpp \
+    element.cpp \
     container.cpp
 
 HEADERS  += \
     header.h \
-    stack.h \
+    element.h \
     container.h
