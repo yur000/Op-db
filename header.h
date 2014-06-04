@@ -38,18 +38,21 @@ private:
     QCheckBox                         *chkbox;
     QTableWidgetItem                  *ptwi;
     QStringList                       strList;
-    QPushButton                       *add;
+    QPushButton                       *addBalance;
     QPushButton                       *close;
+    QPushButton                       *reflesh;
     Counter                           cnt;
     QLayout                           *layout;
     QLayout                           *layoutbut;
     QMap<QString, element>            numbers;
-    QMap<QString, element>::iterator  *iter;
+    QMap<QString, element>::iterator  iter;
 public:
     mainWindow(QWidget* pwgt = 0);
+    void pushTable();
     virtual ~mainWindow();
 private slots:
     void changed(int,int);
+    void refleshTable();
 };
 
 #endif // HEADER_H
