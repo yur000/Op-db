@@ -9,26 +9,12 @@
 #include <QLayout>
 #include <QTableWidget>
 #include <QStringList>
-#include <QMenu>
 #include <QCheckBox>
 #include <QMap>
+#include <QIntValidator>
+#include <QItemDelegate>
 #include "element.h"
-
-class Counter : public QObject {
-    Q_OBJECT
-private:
-    int m_nValue;
-
-public:
-    Counter();
-
-public slots:
-    void slotInc();
-
-signals:
-    void goodbye       (   );
-    void counterChanged(int);
-};
+#include "balanceWindow.h"
 
 class mainWindow : public QWidget {
     Q_OBJECT
@@ -41,9 +27,9 @@ private:
     QPushButton                       *addBalance;
     QPushButton                       *close;
     QPushButton                       *reflesh;
-    Counter                           cnt;
     QLayout                           *layout;
     QLayout                           *layoutbut;
+    balanceWindow                     *balWind;
     QMap<QString, element>            numbers;
     QMap<QString, element>::iterator  iter;
 public:
@@ -52,7 +38,21 @@ public:
     virtual ~mainWindow();
 private slots:
     void changed(int,int);
+    void updateBalance(int,int,bool,bool);
     void refleshTable();
+    void showbal();
+};
+
+class NonEditTableColumnDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    NonEditTableColumnDelegate(QObject * parent = 0) : QItemDelegate(parent) {}
+    virtual QWidget * createEditor ( QWidget *, const QStyleOptionViewItem &,
+                                     const QModelIndex &) const
+    {
+        return 0;
+    }
 };
 
 #endif // HEADER_H

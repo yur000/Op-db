@@ -14,8 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     header.cpp \
-    element.cpp
+    element.cpp \
+    balanceWindow.cpp
 
 HEADERS  += \
     header.h \
-    element.h
+    element.h \
+    balanceWindow.h
