@@ -23,13 +23,14 @@ private:
     QLayout                           *layout;
     QLayout                           *layoutbut;
     QComboBox                         *comboBox;
-    QSpinBox                          *spinBox;
+    QSpinBox                          *spinBoxBalance;
+    QSpinBox                          *spinBoxTarif;
 public:
     balanceWindow(QWidget* pwgt = 0);
     void setCBox(const QMap<QString, element>);
     virtual ~balanceWindow();
 signals:
-    void sendBalance(int, int, bool, bool);
+    void sendBalance(int, int, int, bool, bool);
 private slots:
     void okPressed();
 };

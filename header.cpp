@@ -22,6 +22,8 @@ mainWindow::mainWindow(QWidget* pwgt) {
     numbers.insert("7836412", *el);
     el = new element(0,1,0,0);
     numbers.insert("1830684", *el);
+    el = new element(9437,30,1,1);
+    numbers.insert("3429854", *el);
 
     this->pushTable();
 
@@ -36,11 +38,9 @@ mainWindow::mainWindow(QWidget* pwgt) {
     this->setMinimumWidth(550);
     this->show();
 
-    connect(tbl, SIGNAL(cellChanged(int,int)), SLOT(changed(int,int)));
     connect(close, SIGNAL(clicked()), SLOT(close()));
     connect(reflesh, SIGNAL(clicked()), SLOT(refleshTable()));
     connect(addBalance, SIGNAL(clicked()), SLOT(showbal()));
-
 }
 
 void mainWindow::pushTable() {
@@ -74,18 +74,6 @@ void mainWindow::pushTable() {
     }
 }
 
-void mainWindow::changed(int i, int j){
-    QIntValidator valid(0,100,this);
-    if(j==2) {
-        ptwi = tbl->item(i,0);
-        iter = numbers.find(ptwi->text());
-        ptwi = tbl->item(i,j);
-        if(ptwi->text().toInt())
-        iter.value().setTarifID(ptwi->text().toInt());
-
-    }
-}
-
 void mainWindow::refleshTable() {
     this->pushTable();
 }
@@ -94,13 +82,15 @@ void mainWindow::showbal(){
     balWind = new balanceWindow(this);
     balWind->setCBox(numbers);
     balWind->show();
-    connect(balWind, SIGNAL(sendBalance(int,int,bool,bool)), SLOT(updateBalance(int,int,bool,bool)));
+    connect(balWind, SIGNAL(sendBalance(int,int,int,bool,bool)),
+            SLOT(updateBalance(int,int,int,bool,bool)));
 }
 
-void mainWindow::updateBalance(int line, int sum, bool isInet, bool isBlock) {
+void mainWindow::updateBalance(int line, int sum, int tarif, bool isInet, bool isBlock) {
     iter = numbers.begin();
     iter = iter+line;
     iter.value().setBalance(iter.value().getBalance()+sum);
+    if(tarif) iter.value().setTarifID(tarif);
     iter.value().setInet(isInet);
     iter.value().setBlock(isBlock);
     refleshTable();

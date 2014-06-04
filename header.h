@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QString>
 #include <QWidget>
-#include <QLabel>
 #include <QPushButton>
 #include <QLayout>
 #include <QTableWidget>
@@ -19,7 +18,6 @@
 class mainWindow : public QWidget {
     Q_OBJECT
 private:
-    QLabel                            *lbl;
     QTableWidget                      *tbl;
     QCheckBox                         *chkbox;
     QTableWidgetItem                  *ptwi;
@@ -37,8 +35,7 @@ public:
     void pushTable();
     virtual ~mainWindow();
 private slots:
-    void changed(int,int);
-    void updateBalance(int,int,bool,bool);
+    void updateBalance(int,int,int,bool,bool);
     void refleshTable();
     void showbal();
 };

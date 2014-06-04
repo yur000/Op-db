@@ -1,15 +1,16 @@
 #include"balanceWindow.h"
 
 balanceWindow::balanceWindow(QWidget *pwgt){
-    lbl         = new QLabel("Number: ");
-    okBut       = new QPushButton("Ok");
-    close       = new QPushButton("Close");
-    inet        = new QCheckBox;
-    block       = new QCheckBox;
-    comboBox    = new QComboBox();
-    spinBox     = new QSpinBox();
-    layout      = new QBoxLayout(QBoxLayout::TopToBottom);
-    layoutbut   = new QBoxLayout(QBoxLayout::LeftToRight);
+    lbl             = new QLabel("Number: ");
+    okBut           = new QPushButton("Ok");
+    close           = new QPushButton("Close");
+    inet            = new QCheckBox;
+    block           = new QCheckBox;
+    comboBox        = new QComboBox();
+    spinBoxBalance  = new QSpinBox();
+    spinBoxTarif    = new QSpinBox();
+    layout          = new QBoxLayout(QBoxLayout::TopToBottom);
+    layoutbut       = new QBoxLayout(QBoxLayout::LeftToRight);
 
 
     layoutbut->addWidget(lbl);
@@ -18,7 +19,12 @@ balanceWindow::balanceWindow(QWidget *pwgt){
     layoutbut   = new QBoxLayout(QBoxLayout::LeftToRight);
     lbl         = new QLabel("Sum: ");
     layoutbut->addWidget(lbl);
-    layoutbut->addWidget(spinBox);
+    layoutbut->addWidget(spinBoxBalance);
+    layout->addItem(layoutbut);
+    layoutbut   = new QBoxLayout(QBoxLayout::LeftToRight);
+    lbl         = new QLabel("TarifID: ");
+    layoutbut->addWidget(lbl);
+    layoutbut->addWidget(spinBoxTarif);
     layout->addItem(layoutbut);
     layoutbut   = new QBoxLayout(QBoxLayout::LeftToRight);
     lbl         = new QLabel("Internet: ");
@@ -37,7 +43,8 @@ balanceWindow::balanceWindow(QWidget *pwgt){
 
 
     this->setLayout(layout);
-    spinBox->setRange(1,100000);
+    spinBoxBalance->setRange(0,100000);
+    spinBoxTarif->setRange(0,100);
     connect(close, SIGNAL(clicked()), SLOT(close()));
     connect(okBut, SIGNAL(clicked()), SLOT(okPressed()));
 }
@@ -50,13 +57,14 @@ void balanceWindow::setCBox(const QMap<QString, element> nums){
 }
 
 void balanceWindow::okPressed() {
-    int line, sum;
+    int line, sum, tarif;
     bool isInet, isBlock;
     line = comboBox->currentIndex();
-    sum = spinBox->value();
+    sum = spinBoxBalance->value();
+    tarif = spinBoxTarif->value();
     isInet = inet->isChecked();
     isBlock = block->isChecked();
-    emit sendBalance(line, sum, isInet, isBlock);
+    emit sendBalance(line, sum, tarif, isInet, isBlock);
     this->hide();
 }
 
