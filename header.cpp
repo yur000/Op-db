@@ -1,10 +1,10 @@
 #include "header.h"
 
 mainWindow::mainWindow(QWidget* pwgt) {
-
     addBalance  = new QPushButton("Manage");
     reflesh       = new QPushButton("Reflesh");
     close       = new QPushButton("Close");
+    undo       = new QPushButton("Undo All");
     tbl         = new QTableWidget(pwgt);
     layout      = new QBoxLayout(QBoxLayout::TopToBottom);
     layoutbut   = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -14,21 +14,12 @@ mainWindow::mainWindow(QWidget* pwgt) {
                 << "Internet"
                 << "Blocked";
 
-    element *el = new element(111,22,0,1);
-    numbers.insert("2000001", *el);
-    el = new element(222,32,1,0);
-    numbers.insert("6912492", *el);
-    el = new element(541,24,1,1);
-    numbers.insert("7836412", *el);
-    el = new element(0,1,0,0);
-    numbers.insert("1830684", *el);
-    el = new element(9437,30,1,1);
-    numbers.insert("3429854", *el);
-
+    this->loadNums();
     this->pushTable();
 
     layoutbut->addWidget(addBalance);
     layoutbut->addWidget(reflesh);
+    layoutbut->addWidget(undo);
     layoutbut->addWidget(close);
     layout->addItem(layoutbut);
     layout->addWidget(tbl);
@@ -41,6 +32,7 @@ mainWindow::mainWindow(QWidget* pwgt) {
     connect(close, SIGNAL(clicked()), SLOT(close()));
     connect(reflesh, SIGNAL(clicked()), SLOT(refleshTable()));
     connect(addBalance, SIGNAL(clicked()), SLOT(showbal()));
+    connect(undo, SIGNAL(clicked()), SLOT(undoAll()));
 }
 
 void mainWindow::pushTable() {
@@ -93,6 +85,24 @@ void mainWindow::updateBalance(int line, int sum, int tarif, bool isInet, bool i
     if(tarif) iter.value().setTarifID(tarif);
     iter.value().setInet(isInet);
     iter.value().setBlock(isBlock);
+    refleshTable();
+}
+
+void mainWindow::loadNums() {
+    element *el = new element(111,22,0,1);
+    numbers.insert("2000001", *el);
+    el = new element(222,32,1,0);
+    numbers.insert("6912492", *el);
+    el = new element(541,24,1,1);
+    numbers.insert("7836412", *el);
+    el = new element(0,1,0,0);
+    numbers.insert("1830684", *el);
+    el = new element(9437,30,1,1);
+    numbers.insert("3429854", *el);
+}
+
+void mainWindow::undoAll() {
+    loadNums();
     refleshTable();
 }
 

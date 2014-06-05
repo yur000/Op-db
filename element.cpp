@@ -59,22 +59,3 @@ void element::setBlock(bool inBlock) {
 
 element::~element() {
 }
-
-
-
-istream &operator>>(istream &stream, element &TempObject) {
-    cout << "Type: ";
-    stream >> TempObject.Balance;
-    stream >> TempObject.TarifID;
-    stream >> TempObject.Inet;
-    stream >> TempObject.Block;
-	return stream;
-}
-
-ostream &operator<<(ostream &stream, const element TempObject) {
-    stream << TempObject.Balance << " "
-           << TempObject.TarifID << " "
-           << TempObject.Inet<< " "
-           << TempObject.Block << endl;
-	return stream;
-}

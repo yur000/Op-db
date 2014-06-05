@@ -25,6 +25,7 @@ private:
     QPushButton                       *addBalance;
     QPushButton                       *close;
     QPushButton                       *reflesh;
+    QPushButton                       *undo;
     QLayout                           *layout;
     QLayout                           *layoutbut;
     balanceWindow                     *balWind;
@@ -33,11 +34,13 @@ private:
 public:
     mainWindow(QWidget* pwgt = 0);
     void pushTable();
+    void loadNums();
     virtual ~mainWindow();
 private slots:
     void updateBalance(int,int,int,bool,bool);
     void refleshTable();
     void showbal();
+    void undoAll();
 };
 
 class NonEditTableColumnDelegate : public QItemDelegate

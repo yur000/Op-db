@@ -43,7 +43,7 @@ balanceWindow::balanceWindow(QWidget *pwgt){
 
 
     this->setLayout(layout);
-    spinBoxBalance->setRange(0,100000);
+    spinBoxBalance->setRange(0,999999);
     spinBoxTarif->setRange(0,100);
     connect(close, SIGNAL(clicked()), SLOT(close()));
     connect(okBut, SIGNAL(clicked()), SLOT(okPressed()));

@@ -1,6 +1,5 @@
 #ifndef _ELEMENT_
 #define _ELEMENT_
-#include<iostream>
 
 class element  {
     int Balance, TarifID;
@@ -18,8 +17,6 @@ public:
     void setInet(bool);
     void setBlock(bool);
     ~element();
-    friend std::istream &operator>>(std::istream&, element&);
-    friend std::ostream &operator<<(std::ostream&, const element);
 };
 
 #endif
