@@ -4,9 +4,9 @@ balanceWindow::balanceWindow(QWidget *pwgt){
     lbl             = new QLabel("Number: ");
     okBut           = new QPushButton("Ok");
     close           = new QPushButton("Close");
-    inet            = new QCheckBox;
-    block           = new QCheckBox;
-    comboBox        = new QComboBox();
+    inet            = new QCheckBox(pwgt);
+    block           = new QCheckBox(pwgt);
+    comboBox        = new QComboBox(pwgt);
     spinBoxBalance  = new QSpinBox();
     spinBoxTarif    = new QSpinBox();
     layout          = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -43,16 +43,20 @@ balanceWindow::balanceWindow(QWidget *pwgt){
 
 
     this->setLayout(layout);
-    spinBoxBalance->setRange(0,999999);
+    this->setWindowTitle("Manage");
+    spinBoxBalance->setRange(-999999,999999);
     spinBoxTarif->setRange(0,100);
+    inet->setTristate(1);
+    block->setTristate(1);
     connect(close, SIGNAL(clicked()), SLOT(close()));
     connect(okBut, SIGNAL(clicked()), SLOT(okPressed()));
 }
 
-void balanceWindow::setCBox(const QMap<QString, element> nums){
+void balanceWindow::setCBox(const QMap<QString, element> *nums){
     QMap<QString, element>::const_iterator iter;
-    for(iter = nums.begin();iter!=nums.end();iter++) {
+    for(iter = nums->begin();iter!=nums->end();iter++) {
         comboBox->addItem(iter.key());
+
     }
 }
 
@@ -62,10 +66,20 @@ void balanceWindow::okPressed() {
     line = comboBox->currentIndex();
     sum = spinBoxBalance->value();
     tarif = spinBoxTarif->value();
-    isInet = inet->isChecked();
-    isBlock = block->isChecked();
+    if(!inet->isTristate()) isInet = inet->isChecked();
+    else isInet = -1;
+    if(!block->isTristate()) isBlock = block->isChecked();
+    else isBlock = -1;
     emit sendBalance(line, sum, tarif, isInet, isBlock);
     this->hide();
+}
+
+void balanceWindow::setLine(int line, int) {
+    comboBox->setCurrentIndex(line);
+}
+
+void balanceWindow::setLine(int line) {
+    if(line>0) comboBox->setCurrentIndex(line);
 }
 
 balanceWindow::~balanceWindow() {

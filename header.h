@@ -1,6 +1,8 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+#include <QFile>
+#include <QDataStream>
 #include <QObject>
 #include <QString>
 #include <QWidget>
@@ -13,6 +15,8 @@
 #include <QIntValidator>
 #include <QItemDelegate>
 #include "element.h"
+#include"stack.h"
+#include"stack.cpp"
 #include "balanceWindow.h"
 
 class mainWindow : public QWidget {
@@ -24,23 +28,28 @@ private:
     QStringList                       strList;
     QPushButton                       *addBalance;
     QPushButton                       *close;
-    QPushButton                       *reflesh;
+    QPushButton                       *save;
     QPushButton                       *undo;
     QLayout                           *layout;
     QLayout                           *layoutbut;
     balanceWindow                     *balWind;
-    QMap<QString, element>            numbers;
+    QMap<QString, element>            *numbers;
+    QMap<QString, element>            *numbsTmp;
     QMap<QString, element>::iterator  iter;
+    Stack< QMap<QString, element> >   *st;
 public:
     mainWindow(QWidget* pwgt = 0);
     void pushTable();
     void loadNums();
+    bool read_map_bin(QMap<QString, element>&, const QString&);
+    bool write_map_bin(QMap<QString, element>&, const QString&);
     virtual ~mainWindow();
 private slots:
-    void updateBalance(int,int,int,bool,bool);
+    void updateBalance(int,int,int,int,int);
     void refleshTable();
     void showbal();
-    void undoAll();
+    void undoChange();
+    void saveTable();
 };
 
 class NonEditTableColumnDelegate : public QItemDelegate

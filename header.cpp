@@ -1,13 +1,16 @@
 #include "header.h"
 
+
 mainWindow::mainWindow(QWidget* pwgt) {
     addBalance  = new QPushButton("Manage");
-    reflesh       = new QPushButton("Reflesh");
+    save        = new QPushButton("Save");
     close       = new QPushButton("Close");
-    undo       = new QPushButton("Undo All");
+    undo        = new QPushButton("Undo");
     tbl         = new QTableWidget(pwgt);
     layout      = new QBoxLayout(QBoxLayout::TopToBottom);
     layoutbut   = new QBoxLayout(QBoxLayout::LeftToRight);
+    numbers     = new QMap<QString, element>;
+    st          = new Stack< QMap<QString, element> >;
     strList     << "Number"
                 << "Balance"
                 << "Tarif"
@@ -18,30 +21,33 @@ mainWindow::mainWindow(QWidget* pwgt) {
     this->pushTable();
 
     layoutbut->addWidget(addBalance);
-    layoutbut->addWidget(reflesh);
+    layoutbut->addWidget(save);
     layoutbut->addWidget(undo);
     layoutbut->addWidget(close);
     layout->addItem(layoutbut);
     layout->addWidget(tbl);
 
     this->setLayout(layout);
-    this->setMinimumHeight(300);
-    this->setMinimumWidth(550);
+    this->setMinimumHeight(350);
+    this->setMinimumWidth(557);
+    this->setWindowTitle("Mobile Operator");
     this->show();
 
     connect(close, SIGNAL(clicked()), SLOT(close()));
-    connect(reflesh, SIGNAL(clicked()), SLOT(refleshTable()));
+    connect(save, SIGNAL(clicked()), SLOT(saveTable()));
     connect(addBalance, SIGNAL(clicked()), SLOT(showbal()));
-    connect(undo, SIGNAL(clicked()), SLOT(undoAll()));
+    connect(undo, SIGNAL(clicked()), SLOT(undoChange()));
+    connect(tbl, SIGNAL(cellDoubleClicked(int,int)), SLOT(showbal()));
 }
 
 void mainWindow::pushTable() {
     int i;
-    tbl->setRowCount(numbers.size());
+
+    tbl->setRowCount(numbers->size());
     tbl->setColumnCount(5);
     tbl->setHorizontalHeaderLabels(strList);
 
-    for (i = 0, iter = numbers.begin(); iter!=numbers.end(); iter++, i++) {
+    for (i = 0, iter = numbers->begin(); iter!=numbers->end(); iter++, i++) {
         ptwi = new QTableWidgetItem(QString(iter.key()));
         tbl->setItem(i, 0, ptwi);
         tbl->setItemDelegateForColumn(0, new NonEditTableColumnDelegate());
@@ -73,38 +79,61 @@ void mainWindow::refleshTable() {
 void mainWindow::showbal(){
     balWind = new balanceWindow(this);
     balWind->setCBox(numbers);
+    balWind->setLine(tbl->currentRow());
     balWind->show();
-    connect(balWind, SIGNAL(sendBalance(int,int,int,bool,bool)),
-            SLOT(updateBalance(int,int,int,bool,bool)));
+    connect(balWind, SIGNAL(sendBalance(int,int,int,int,int)),
+            SLOT(updateBalance(int,int,int,int,int)));
+    connect(tbl, SIGNAL(cellClicked(int,int)), balWind, SLOT(setLine(int,int)));
 }
 
-void mainWindow::updateBalance(int line, int sum, int tarif, bool isInet, bool isBlock) {
-    iter = numbers.begin();
+void mainWindow::updateBalance(int line, int sum, int tarif, int isInet, int isBlock) {
+    numbsTmp = new QMap<QString, element>(*numbers);
+    st->Push(numbsTmp);
+    iter = numbers->begin();
     iter = iter+line;
     iter.value().setBalance(iter.value().getBalance()+sum);
     if(tarif) iter.value().setTarifID(tarif);
-    iter.value().setInet(isInet);
-    iter.value().setBlock(isBlock);
-    refleshTable();
+    if(isInet != -1) iter.value().setInet(isInet);
+    if(isBlock != -1) iter.value().setBlock(isBlock);
+    this->refleshTable();
 }
 
 void mainWindow::loadNums() {
-    element *el = new element(111,22,0,1);
-    numbers.insert("2000001", *el);
-    el = new element(222,32,1,0);
-    numbers.insert("6912492", *el);
-    el = new element(541,24,1,1);
-    numbers.insert("7836412", *el);
-    el = new element(0,1,0,0);
-    numbers.insert("1830684", *el);
-    el = new element(9437,30,1,1);
-    numbers.insert("3429854", *el);
+    read_map_bin(*numbers, QString("nums"));
 }
 
-void mainWindow::undoAll() {
-    loadNums();
-    refleshTable();
+void mainWindow::undoChange() {
+    if(st->GetCount()) {
+        numbers = st->Top();
+        st->Pop();
+        this->refleshTable();
+    }
+}
+
+void mainWindow::saveTable() {
+    this->write_map_bin(*numbers, QString("nums"));
+}
+
+bool mainWindow::write_map_bin(QMap<QString, element>& map, const QString& file) {
+    QFile f (file);
+    if (!f.open(QIODevice::WriteOnly)) return false;
+
+    QDataStream str(&f);
+    str << map;
+
+    return true;
+}
+
+bool mainWindow::read_map_bin(QMap<QString, element>& map, const QString& file) {
+    QFile f (file);
+    if (!f.open(QIODevice::ReadOnly)) return false;
+
+    QDataStream str(&f);
+    map.clear();
+    str >> map;
+    return true;
 }
 
 mainWindow::~mainWindow() {
+
 }

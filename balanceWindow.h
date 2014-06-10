@@ -27,10 +27,13 @@ private:
     QSpinBox                          *spinBoxTarif;
 public:
     balanceWindow(QWidget* pwgt = 0);
-    void setCBox(const QMap<QString, element>);
+    void setCBox(const QMap<QString, element>*);
     virtual ~balanceWindow();
 signals:
-    void sendBalance(int, int, int, bool, bool);
+    void sendBalance(int, int, int, int, int);
+public slots:
+    void setLine(int, int);
+    void setLine(int);
 private slots:
     void okPressed();
 };

@@ -1,6 +1,8 @@
 #ifndef _ELEMENT_
 #define _ELEMENT_
 
+#include <QDataStream>
+
 class element  {
     int Balance, TarifID;
     bool Inet, Block;
@@ -16,6 +18,8 @@ public:
     void setTarifID(int);
     void setInet(bool);
     void setBlock(bool);
+    friend QDataStream &operator>>(QDataStream&, element&);
+    friend QDataStream &operator<<(QDataStream&, const element);
     ~element();
 };
 
